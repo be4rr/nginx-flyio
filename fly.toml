@@ -1,0 +1,29 @@
+# fly.toml app configuration file generated for nginx-app-0514 on 2024-05-14T16:50:16+09:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'nginx-app-0514'
+primary_region = 'nrt'
+
+[processes]
+  web = "nginx -g 'daemon off;'"
+  app = "python /app/main.py"
+
+[[services]]
+  processes = ["web"]
+  protocol = 'tcp'
+  internal_port = 80
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+
+[[vm]]
+  size = 'shared-cpu-1x'
